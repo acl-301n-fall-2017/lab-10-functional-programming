@@ -5,6 +5,9 @@
 // TODO: Wrap the entire contents of this file in an IIFE.
 // Set a parameter in the anonymous function that we immediately call called module.
 // Then pass in the global browser object - "window" - as an argument to our IIFE.
+(function (module) {
+
+
 function Article(rawDataObj) {
   /* REVIEW: In lab 8, we explored a lot of new functionality going on here. Let's re-examine
   the concept of context.
@@ -125,4 +128,6 @@ Article.prototype.updateRecord = function(callback) {
   })
   .then(console.log)
   .then(callback);
+  module.Article = Article;
 };
+}) (window);
