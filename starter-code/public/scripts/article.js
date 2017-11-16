@@ -88,7 +88,7 @@ Article.numWordsByAuthor = () => {
     // The first property should be pretty straightforward, but you will need to chain
     // some combination of filter, map, and reduce to get the value for the second
     // property.
-
+    article.JSON.parse(author, Article.numWordsAll)
   })
 };
 
