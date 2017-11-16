@@ -5,6 +5,7 @@
 // TODO: Wrap the entire contents of this file in an IIFE.
 // Set a parameter in the anonymous function that we immediately call called module.
 // Then pass in the global browser object - "window" - as an argument to our IIFE.
+(function(module) {
 function Article(rawDataObj) {
   /* REVIEW: In lab 8, we explored a lot of new functionality going on here. Let's re-examine
   the concept of context.
@@ -43,9 +44,12 @@ Article.loadAll = rows => {
   /* OLD forEach():
   rawData.forEach(function(ele) {
   Article.all.push(new Article(ele));
+
+                    
+  };
 });
 */
-
+Article.all = row.map(row => new Article(row));
 };
 
 Article.fetchAll = callback => {
@@ -60,13 +64,20 @@ Article.fetchAll = callback => {
 
 // TODO: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
 Article.numWordsAll = () => {
-  return Article.all.map().reduce()
+  return Article.all.map(article => article.body ).reduce((sum, value) => {
+    var wordCount = value.split(' ').length;
+    return wordCount + sum;
+  })
 };
 
 // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
 // probably need to use the optional accumulator argument in your reduce call.
 Article.allAuthors = () => {
-  return Article.all.map().reduce();
+  return Article.all.map(article => article.author)
+    .reduce((unique, author) => {
+      if (unique.indexOf(author) < 0 ) unique.push(author);
+      return unique;
+    });
 };
 
 Article.numWordsByAuthor = () => {
@@ -78,7 +89,17 @@ Article.numWordsByAuthor = () => {
     // The first property should be pretty straightforward, but you will need to chain
     // some combination of filter, map, and reduce to get the value for the second
     // property.
+    return {
+      name: author,
+      words: Article.all
+        .filter(article => article.author === author)
+        .map(article => article.split(' ').length )
+        .reduce((sum, value) => sum + value)
+      //filter all articles by each author
 
+
+
+    }
   })
 };
 
@@ -126,3 +147,5 @@ Article.prototype.updateRecord = function(callback) {
   .then(console.log)
   .then(callback);
 };
+module.Article = Article;
+})(window);
