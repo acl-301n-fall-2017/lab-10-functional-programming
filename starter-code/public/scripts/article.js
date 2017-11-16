@@ -64,22 +64,30 @@ Article.fetchAll = callback => {
 
 // TODO: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
 Article.numWordsAll = () => {
-  return Article.all.map(function(article)){
-    return article.body;
-  }.reduce(function(acc,curr)){
-    var wordCount = curr.split(' ').length;
-    return acc + wordCount;
-  }
+  return Article.all.map(article => article.body).reduce((acc,curr) => acc + curr.split(' ').length, 0)
 };
 
 // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
 // probably need to use the optional accumulator argument in your reduce call.
 Article.allAuthors = () => {
-  return Article.all.map().reduce();
+  return Article.all.map(authorNames => article.author).reduce((acc,curr) => {
+    if (acc.indexOf(curr) === -1) {
+      acc.push(curr);
+    }
+    return acc;
+  },[])
 };
 
 Article.numWordsByAuthor = () => {
   return Article.allAuthors().map(author => {
+      return {
+        name: author,
+        words: Article.all
+          .filter()
+          .map()
+          .reduce()
+      }
+    }
     // TODO: Transform each author string into an object with properties for
     // the author's name, as well as the total number of words across all articles
     // written by the specified author.
