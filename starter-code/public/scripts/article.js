@@ -88,7 +88,13 @@ Article.numWordsByAuthor = () => {
     // The first property should be pretty straightforward, but you will need to chain
     // some combination of filter, map, and reduce to get the value for the second
     // property.
-    article.JSON.parse(author, Article.numWordsAll)
+    // article.JSON.parse(article.author, article.numWordsAll)
+    return {
+      name:author,
+      words: Article.all.filter(article => (article.author == author))
+      .map(article => article.body)
+      .reduce(acc, curr)=> acc + curr.split(' ').length, 0;
+    }
   })
 };
 
