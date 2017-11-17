@@ -37,8 +37,8 @@ Article.prototype.toHtml = function() {
 
 Article.loadAll = rows => {
   rows.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)));
-  Article.all = rawData.map(data => new Article(data));
-  })
+  Article.all = rows.map(data => new Article(data))
+};
   // TODO: Refactor this forEach code, by using a `.map` call instead, since what we are trying to accomplish
   // is the transformation of one collection into another. Remember that we can set variables equal to the result
   // of functions. So if we set a variable equal to the result of a .map, it will be our transformed array.
@@ -50,7 +50,7 @@ Article.loadAll = rows => {
 });
 */
 
-};
+
 
 Article.fetchAll = callback => {
   $.get('/articles')
@@ -64,18 +64,18 @@ Article.fetchAll = callback => {
 
 // TODO: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
 Article.numWordsAll = () => {
-  return Article.all.map(article => article.body).reduce(acc, curr)=> acc + curr.split(' ').length, 0
+  return Article.all.map(article => article.body).reduce((acc, curr)=> acc + curr.split(' ').length, 0)
 };
 
 // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
 // probably need to use the optional accumulator argument in your reduce call.
 Article.allAuthors = () => {
-  return Article.all.map(article => article.author).reduce(authorArray, author) => {
+  return Article.all.map(article => article.author).reduce((authorArray, author) => {
     if (authorArray.indexOf(author)== -1) {
       authorArray.push(author)
     }
     return authorArray
-  }
+  },[])
 
 };
 
@@ -93,7 +93,7 @@ Article.numWordsByAuthor = () => {
       name:author,
       words: Article.all.filter(article => (article.author == author))
       .map(article => article.body)
-      .reduce(acc, curr)=> acc + curr.split(' ').length, 0;
+      .reduce((acc, curr)=> acc + curr.split(' ').length, 0)
     }
   })
 };
@@ -141,6 +141,6 @@ Article.prototype.updateRecord = function(callback) {
   })
   .then(console.log)
   .then(callback);
-  module.Article = Article;
 };
+module.Article = Article;
 }) (window);
