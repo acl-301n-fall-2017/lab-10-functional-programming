@@ -41,9 +41,9 @@
     // is the transformation of one collection into another. Remember that we can set variables equal to the result
     // of functions. So if we set a variable equal to the result of a .map, it will be our transformed array.
     // There is no need to push to anything.
-    Article.all = rawData.map(function(ele) {
-      return new Article(ele);
-    });
+    // Article.all = rawData.map(function(ele)
+    Article.all = rows.map(ele => new Article(ele));
+      // return new Article(ele);
     /* OLD forEach():
     rawData.forEach(function(ele) {
     Article.all.push(new Article(ele));
@@ -70,7 +70,7 @@ Article.numWordsAll = () => {
 // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
 // probably need to use the optional accumulator argument in your reduce call.
 Article.allAuthors = () => {
-  return Article.all.map(authorNames => article.author).reduce((acc,curr) => {
+  return Article.all.map(article => article.author).reduce((acc,curr) => {
     if (acc.indexOf(curr) === -1) {
       acc.push(curr);
     }
@@ -84,10 +84,10 @@ Article.numWordsByAuthor = () => {
         name: author,
         words: Article.all
           .filter(article => (article.author == author))
-          .map(article == article.body)
+          .map(article => article.body)
           .reduce((acc,curr) => acc + curr.split(' ').length, 0)
       }
-    }
+    })
     // TODO: Transform each author string into an object with properties for
     // the author's name, as well as the total number of words across all articles
     // written by the specified author.
@@ -96,8 +96,8 @@ Article.numWordsByAuthor = () => {
     // some combination of filter, map, and reduce to get the value for the second
     // property.
 
-  })
-};
+  };
+
 
 Article.truncateTable = callback => {
   $.ajax({
