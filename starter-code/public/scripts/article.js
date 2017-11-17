@@ -49,7 +49,7 @@ Article.loadAll = rows => {
   };
 });
 */
-Article.all = row.map(row => new Article(row));
+Article.all = rows.map(row => new Article(row));
 };
 
 Article.fetchAll = callback => {
@@ -67,7 +67,7 @@ Article.numWordsAll = () => {
   return Article.all.map(article => article.body ).reduce((sum, value) => {
     var wordCount = value.split(' ').length;
     return wordCount + sum;
-  })
+  },0)
 };
 
 // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
@@ -77,7 +77,7 @@ Article.allAuthors = () => {
     .reduce((unique, author) => {
       if (unique.indexOf(author) < 0 ) unique.push(author);
       return unique;
-    });
+    },[]);
 };
 
 Article.numWordsByAuthor = () => {
@@ -93,7 +93,7 @@ Article.numWordsByAuthor = () => {
       name: author,
       words: Article.all
         .filter(article => article.author === author)
-        .map(article => article.split(' ').length )
+        .map(article => article.body.split(' ').length )
         .reduce((sum, value) => sum + value)
       //filter all articles by each author
 
