@@ -83,9 +83,9 @@ Article.numWordsByAuthor = () => {
       return {
         name: author,
         words: Article.all
-          .filter()
-          .map()
-          .reduce()
+          .filter(article => (article.author == author))
+          .map(article == article.body)
+          .reduce((acc,curr) => acc + curr.split(' ').length, 0)
       }
     }
     // TODO: Transform each author string into an object with properties for
