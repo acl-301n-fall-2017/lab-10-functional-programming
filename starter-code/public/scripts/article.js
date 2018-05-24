@@ -2,10 +2,10 @@
 
 // REVIEW: Check out all of the functions that we've cleaned up with arrow function syntax.
 
-// TODO: Wrap the entire contents of this file in an IIFE.
+// TODOne: Wrap the entire contents of this file in an IIFE.
 // Set a parameter in the anonymous function that we immediately call called module.
 // Then pass in the global browser object - "window" - as an argument to our IIFE.
-function Article(rawDataObj) {
+(function Article(module) {
   /* REVIEW: In lab 8, we explored a lot of new functionality going on here. Let's re-examine
   the concept of context.
   Normally, "this" inside of a constructor function refers to the newly instantiated object.
@@ -17,8 +17,8 @@ function Article(rawDataObj) {
   lexical arrows, "this" inside the function will still be the same "this" as it was outside
   the function.
   As a result, we no longer have to pass in the optional "this" argument to forEach!*/
-  Object.keys(rawDataObj).forEach(key => this[key] = rawDataObj[key]);
-}
+  Object.keys(module).forEach(key => this[key] = module[key]);
+
 
 Article.all = [];
 
@@ -125,4 +125,6 @@ Article.prototype.updateRecord = function(callback) {
   })
   .then(console.log)
   .then(callback);
-};
+  module.articleView = articleView
+}
+})(window);
