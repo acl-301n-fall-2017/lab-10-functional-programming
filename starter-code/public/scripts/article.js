@@ -2,9 +2,10 @@
 
 // REVIEW: Check out all of the functions that we've cleaned up with arrow function syntax.
 
-// TODO: Wrap the entire contents of this file in an IIFE.
+// TODONE: Wrap the entire contents of this file in an IIFE.
 // Set a parameter in the anonymous function that we immediately call called module.
 // Then pass in the global browser object - "window" - as an argument to our IIFE.
+(function(module) {
 function Article(rawDataObj) {
   /* REVIEW: In lab 8, we explored a lot of new functionality going on here. Let's re-examine
   the concept of context.
@@ -40,12 +41,9 @@ Article.loadAll = rows => {
   // of functions. So if we set a variable equal to the result of a .map, it will be our transformed array.
   // There is no need to push to anything.
 
-  /* OLD forEach():
-  rawData.forEach(function(ele) {
-  Article.all.push(new Article(ele));
-});
-*/
-
+  Article.all = rows.map(rowArticle => (new Article(rowArticle)))
+  console.log(Article.all);
+  console.log(rows);
 };
 
 Article.fetchAll = callback => {
@@ -53,7 +51,7 @@ Article.fetchAll = callback => {
   .then(
     results => {
       Article.loadAll(results);
-      callback();
+      callback(articleView.initIndexPage);
     }
   )
 };
@@ -126,3 +124,5 @@ Article.prototype.updateRecord = function(callback) {
   .then(console.log)
   .then(callback);
 };
+
+})(window);
