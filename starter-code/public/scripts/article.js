@@ -124,5 +124,6 @@ Article.prototype.updateRecord = function(callback) {
   .then(console.log)
   .then(callback);
 };
+module.Article = Article;
 
-})(window);
+}(window));
