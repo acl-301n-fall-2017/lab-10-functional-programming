@@ -33,10 +33,14 @@
     return template(this);
   };
 
-  Article.loadAll = rows => {
-    rows.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)));
+  Article.loadAll = rawData => {
+    rawData.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)));
 
-    // TODO: Refactor this forEach code, by using a `.map` call instead, since what we are trying to accomplish
+    Article.all = rawData.map(rawDataObj => {
+      return new Article(rawDataObj);
+    });
+
+    // TODOne: Refactor this forEach code, by using a `.map` call instead, since what we are trying to accomplish
     // is the transformation of one collection into another. Remember that we can set variables equal to the result
     // of functions. So if we set a variable equal to the result of a .map, it will be our transformed array.
     // There is no need to push to anything.
@@ -59,9 +63,13 @@
     )
   };
 
-  // TODO: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
+  // TODOne: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
   Article.numWordsAll = () => {
-    return Article.all.map().reduce()
+    return Article.all.map(article => {
+      return article.body;
+    }).reduce((acc, articleBody) => {
+      return acc + articleBody.split(' ').length;
+    },0)
   };
 
   // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
@@ -127,4 +135,5 @@
     .then(console.log)
     .then(callback);
   };
+  module.Article = Article;
 })(window)
