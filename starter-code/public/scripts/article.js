@@ -5,7 +5,8 @@
 // TODOne: Wrap the entire contents of this file in an IIFE.
 // Set a parameter in the anonymous function that we immediately call called module.
 // Then pass in the global browser object - "window" - as an argument to our IIFE.
-(function Article(module) {
+(function (module) {
+  function Article(rawDataObj) {
   /* REVIEW: In lab 8, we explored a lot of new functionality going on here. Let's re-examine
   the concept of context.
   Normally, "this" inside of a constructor function refers to the newly instantiated object.
@@ -17,8 +18,8 @@
   lexical arrows, "this" inside the function will still be the same "this" as it was outside
   the function.
   As a result, we no longer have to pass in the optional "this" argument to forEach!*/
-  Object.keys(module).forEach(key => this[key] = module[key]);
-
+  Object.keys(rawDataObj).forEach(key => this[key] = rawDataObj[key]);
+  };
 
 Article.all = [];
 
@@ -33,16 +34,15 @@ Article.prototype.toHtml = function() {
 };
 
 Article.loadAll = rows => {
-  rows.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)));
+ Article.all = rows.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)))
+              .map(function(item){
+                return new Article(item);
+              })
 
   // TODONE: Refactor this forEach code, by using a `.map` call instead, since what we are trying to accomplish
   // is the transformation of one collection into another. Remember that we can set variables equal to the result
   // of functions. So if we set a variable equal to the result of a .map, it will be our transformed array.
   // There is no need to push to anything.
-  Article.all = rows.map ((raw) => {
-  return new Article(raw);
-  })
-  return Article.all;
   /* OLD forEach():
   rawData.forEach(function(ele) {
   Article.all.push(new Article(ele));
@@ -60,7 +60,7 @@ Article.fetchAll = callback => {
   )
 };
 
-// TODO: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
+// TODOne: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
 Article.numWordsAll = () => {
   return Article.all.map(article => article.body)
                     .reduce((accumulator, articleBody) => accumulator + articleBody.split(' ').length,0)
@@ -69,8 +69,12 @@ Article.numWordsAll = () => {
 // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
 // probably need to use the optional accumulator argument in your reduce call.
 Article.allAuthors = () => {
-  return Article.all.map().reduce();
-};
+  return Article.all.map(article => article.author)
+                    .reduce((whateverErdemwants, articleAuthor) => {
+                    if (!whateverErdemwants.includes(articleAuthor)) whateverErdemwants.push(articleAuthor);
+                    return whateverErdemwants;
+                    },   []);          
+                  };
 
 Article.numWordsByAuthor = () => {
   return Article.allAuthors().map(author => {
@@ -127,7 +131,7 @@ Article.prototype.updateRecord = function(callback) {
     }
   })
   .then(console.log)
-  .then(callback);
-  module.articleView = articleView
-}
-})(window);
+  .then(callback); 
+}; 
+module.Article = Article;
+}(window));
