@@ -72,29 +72,39 @@
     }, 0)
   };
 
-  // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
+  // TODOne: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
   // probably need to use the optional accumulator argument in your reduce call.
   Article.allAuthors = () => {
-    return Article.all.map(article => {
-      return article.author;
-    }).reduce((acc, articleAuthor) => {
-      return acc + articleAuthor.includes();
-    }, 0)
-  };
+    return Article.all.map(article => article.author).reduce((acc, authorName) => {
+     if (!acc.includes(authorName)) {
+       acc.push(authorName);
+     }
+     return acc;
+   }, []);
+ };
 
   Article.numWordsByAuthor = () => {
     return Article.allAuthors().map(author => {
-      // TODO: Transform each author string into an object with properties for
+      // TODOne: Transform each author string into an object with properties for
       // the author's name, as well as the total number of words across all articles
       // written by the specified author.
       // HINT: This .map should be setup to return an object literal with two properties.
       // The first property should be pretty straightforward, but you will need to chain
       // some combination of filter, map, and reduce to get the value for the second
       // property.
-      return article.body
+      return {
+        authorName: author,
+        words: Article.all.filter(article => {
+          return article.author === author;
+        })
+        .map(article => {
+          return article.body.split(' ').length;
+        })
+        .reduce((acc, curr) => {
+          return acc + curr;
+        }, 0)
+      };
     })
-    .filter()
-    .reduce()
   };
 
   Article.truncateTable = callback => {

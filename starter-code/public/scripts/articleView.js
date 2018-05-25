@@ -1,7 +1,9 @@
 'use strict';
 
-// TODO: Wrap the entire contents of this file in an IIFE.
+// TODOne: Wrap the entire contents of this file in an IIFE.
 // Pass in to the IIFE a module, upon which objects can be attached for later access.
+(function(module) {
+
 var articleView = {};
 
 articleView.populateFilters = function() {
@@ -128,16 +130,19 @@ articleView.initIndexPage = function() {
 };
 
 articleView.initAdminPage = function() {
-  // TODO: Call the Handlebars `.compile` function, which will return a function for you to use where needed.
+  // TODOne: Call the Handlebars `.compile` function, which will return a function for you to use where needed.
   // Make sure you assign the result of your Handlebars.compile call to a variable called "template", since
   // we are then calling "template" on line 117.
 
   // REVIEW: We use `forEach` here because we are relying on the side-effects of the callback function:
   // appending to the DOM.
   // The callback is not required to return anything.
+  var template = Handlebars.compile();
   Article.numWordsByAuthor().forEach(stat => $('.author-stats').append(template(stat)));
 
   // REVIEW: Simply write the correct values to the page:
   $('#blog-stats .articles').text(Article.all.length);
   $('#blog-stats .words').text(Article.numWordsAll());
 };
+module.articleView = articleView;
+  })(window)
