@@ -42,8 +42,6 @@ Article.loadAll = rows => {
   // There is no need to push to anything.
 
   Article.all = rows.map(rowArticle => (new Article(rowArticle)))
-  console.log(Article.all);
-  console.log(rows);
 };
 
 Article.fetchAll = callback => {
@@ -64,6 +62,7 @@ Article.numWordsAll = () => {
 
 // TODONE: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
 // probably need to use the optional accumulator argument in your reduce call.
+
 Article.allAuthors = () => {
   return Article.all.map(article => article.author)
   .reduce((uniqueAuthors, authorName) => {
@@ -73,17 +72,23 @@ Article.allAuthors = () => {
 };
 
 Article.numWordsByAuthor = () => {
+  // TODONE:
   return Article.allAuthors().map(author => {
-    // TODO: Transform each author string into an object with properties for
-    // the author's name, as well as the total number of words across all articles
-    // written by the specified author.
-    // HINT: This .map should be setup to return an object literal with two properties.
-    // The first property should be pretty straightforward, but you will need to chain
-    // some combination of filter, map, and reduce to get the value for the second
-    // property.
-  })
-};
-
+    return {
+    authorName: author,
+    words: Article.all.filter (function(article) {
+      return article.author === author;
+    })
+    .map(article => {
+      return article.body.split('').length;
+    })
+    .reduce((acc, cur) => {
+      return acc + cur;
+    }, 0)
+  }
+})
+}
+  
 Article.truncateTable = callback => {
   $.ajax({
     url: '/articles',
