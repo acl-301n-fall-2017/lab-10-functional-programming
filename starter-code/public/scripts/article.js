@@ -78,7 +78,7 @@
     return Article.all.map(article => {
       return article.author;
     }).reduce((acc, articleAuthor) => {
-      return acc + articleAuthor.uniqueSort(authors);
+      return acc + articleAuthor.includes();
     }, 0)
   };
 
