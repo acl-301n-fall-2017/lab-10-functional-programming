@@ -2,9 +2,10 @@
 
 // REVIEW: Check out all of the functions that we've cleaned up with arrow function syntax.
 
-// TODO: Wrap the entire contents of this file in an IIFE.
+// TODONE: Wrap the entire contents of this file in an IIFE.
 // Set a parameter in the anonymous function that we immediately call called module.
 // Then pass in the global browser object - "window" - as an argument to our IIFE.
+(function(module) {
 function Article(rawDataObj) {
   /* REVIEW: In lab 8, we explored a lot of new functionality going on here. Let's re-examine
   the concept of context.
@@ -35,17 +36,12 @@ Article.prototype.toHtml = function() {
 Article.loadAll = rows => {
   rows.sort((a,b) => (new Date(b.publishedOn)) - (new Date(a.publishedOn)));
 
-  // TODO: Refactor this forEach code, by using a `.map` call instead, since what we are trying to accomplish
+  // TODONE: Refactor this forEach code, by using a `.map` call instead, since what we are trying to accomplish
   // is the transformation of one collection into another. Remember that we can set variables equal to the result
   // of functions. So if we set a variable equal to the result of a .map, it will be our transformed array.
   // There is no need to push to anything.
 
-  /* OLD forEach():
-  rawData.forEach(function(ele) {
-  Article.all.push(new Article(ele));
-});
-*/
-
+  Article.all = rows.map(rowArticle => (new Article(rowArticle)))
 };
 
 Article.fetchAll = callback => {
@@ -53,35 +49,46 @@ Article.fetchAll = callback => {
   .then(
     results => {
       Article.loadAll(results);
-      callback();
+      callback(articleView.initIndexPage);
     }
   )
 };
 
-// TODO: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
+// TODONE: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
 Article.numWordsAll = () => {
-  return Article.all.map().reduce()
+  return Article.all.map(article => article.body)
+  .reduce((wordCount, articleBody) => wordCount + articleBody.split(' ').length,0)
 };
 
-// TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
+// TODONE: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
 // probably need to use the optional accumulator argument in your reduce call.
+
 Article.allAuthors = () => {
-  return Article.all.map().reduce();
+  return Article.all.map(article => article.author)
+  .reduce((uniqueAuthors, authorName) => {
+    if (!uniqueAuthors.includes(authorName)) uniqueAuthors.push(authorName);
+    return uniqueAuthors;
+  }, []);
 };
 
 Article.numWordsByAuthor = () => {
+  // TODONE:
   return Article.allAuthors().map(author => {
-    // TODO: Transform each author string into an object with properties for
-    // the author's name, as well as the total number of words across all articles
-    // written by the specified author.
-    // HINT: This .map should be setup to return an object literal with two properties.
-    // The first property should be pretty straightforward, but you will need to chain
-    // some combination of filter, map, and reduce to get the value for the second
-    // property.
-
-  })
-};
-
+    return {
+    authorName: author,
+    words: Article.all.filter (function(article) {
+      return article.author === author;
+    })
+    .map(article => {
+      return article.body.split('').length;
+    })
+    .reduce((acc, cur) => {
+      return acc + cur;
+    }, 0)
+  }
+})
+}
+  
 Article.truncateTable = callback => {
   $.ajax({
     url: '/articles',
@@ -126,3 +133,6 @@ Article.prototype.updateRecord = function(callback) {
   .then(console.log)
   .then(callback);
 };
+module.Article = Article;
+
+}(window));
