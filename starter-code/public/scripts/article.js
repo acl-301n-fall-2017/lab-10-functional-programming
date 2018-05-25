@@ -69,13 +69,17 @@
       return article.body;
     }).reduce((acc, articleBody) => {
       return acc + articleBody.split(' ').length;
-    },0)
+    }, 0)
   };
 
   // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
   // probably need to use the optional accumulator argument in your reduce call.
   Article.allAuthors = () => {
-    return Article.all.map().reduce();
+    return Article.all.map(article => {
+      return article.author;
+    }).reduce((acc, articleAuthor) => {
+      return acc + articleAuthor.uniqueSort(authors);
+    }, 0)
   };
 
   Article.numWordsByAuthor = () => {
@@ -87,8 +91,10 @@
       // The first property should be pretty straightforward, but you will need to chain
       // some combination of filter, map, and reduce to get the value for the second
       // property.
-
+      return article.body
     })
+    .filter()
+    .reduce()
   };
 
   Article.truncateTable = callback => {
