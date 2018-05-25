@@ -72,15 +72,16 @@
     }, 0)
   };
 
-  // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
+  // TODOne: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
   // probably need to use the optional accumulator argument in your reduce call.
   Article.allAuthors = () => {
-    return Article.all.map(article => {
-      return article.author;
-    }).reduce((acc, articleAuthor) => {
-      return acc + articleAuthor.uniqueSort(authors);
-    }, 0)
-  };
+    return Article.all.map(article => article.author).reduce((acc, authorName) => {
+     if (!acc.includes(authorName)) {
+       acc.push(authorName);
+     }
+     return acc;
+   }, []);
+ };
 
   Article.numWordsByAuthor = () => {
     return Article.allAuthors().map(author => {
