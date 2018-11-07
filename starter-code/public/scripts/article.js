@@ -1,5 +1,5 @@
 'use strict';
-
+// alert('pokemon');
 // REVIEW: Check out all of the functions that we've cleaned up with arrow function syntax.
 
 // TODO: Wrap the entire contents of this file in an IIFE.
@@ -62,11 +62,26 @@ Article.numWordsAll = () => {
 // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
 // probably need to use the optional accumulator argument in your reduce call.
 Article.allAuthors = () => {
-  return Article.all.map().reduce();
+  // return Article.all.map().reduce();
+  return Article.all.map(allObj => allObj.author).reduce((allNames, name)=> {
+   
+    if(!allNames.includes(name)){
+      allNames.push(name);
+
+    } 
+    return allNames;
+
+  },[] )
+
 };
 
 Article.numWordsByAuthor = () => {
   return Article.allAuthors().map(author => {
+    return {
+      name: author,
+      
+
+    }
     // TODO: Transform each author string into an object with properties for
     // the author's name, as well as the total number of words across all articles
     // written by the specified author.
