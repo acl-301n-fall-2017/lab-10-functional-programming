@@ -77,11 +77,11 @@ Article.allAuthors = () => {
 
 Article.numWordsByAuthor = () => {
   return Article.allAuthors().map(author => {
-    return {
-      name: author,
-      
-
-    }
+    const totalArticleWordCount = Article.all
+          .filter(article => article.author === author)
+          .map(article => article.body)
+          .reduce((totalCount, content) => totalCount + content.split(' ').length, 0);
+  return {"authorName": author, "totalArticleWordCount": totalArticleWordCount}; 
     // TODO: Transform each author string into an object with properties for
     // the author's name, as well as the total number of words across all articles
     // written by the specified author.
