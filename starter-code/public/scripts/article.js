@@ -1,13 +1,14 @@
 'use strict';
-
+// alert('pokemon');
 // REVIEW: Check out all of the functions that we've cleaned up with arrow function syntax.
 
 // TODO: Wrap the entire contents of this file in an IIFE.
 // Set a parameter in the anonymous function that we immediately call called module.
 // Then pass in the global browser object - "window" - as an argument to our IIFE.
-function Article(rawDataObj) {
-  /* REVIEW: In lab 8, we explored a lot of new functionality going on here. Let's re-examine
-  the concept of context.
+// (function (module) {
+  function Article(rawDataObj) {
+    /* REVIEW: In lab 8, we explored a lot of new functionality going on here. Let's re-examine
+    the concept of context.
   Normally, "this" inside of a constructor function refers to the newly instantiated object.
   However, in the function we're passing to forEach, "this" would normally refer to "undefined"
   in strict mode. As a result, we had to pass a second argument to forEach to make sure our "this"
@@ -19,6 +20,7 @@ function Article(rawDataObj) {
   As a result, we no longer have to pass in the optional "this" argument to forEach!*/
   Object.keys(rawDataObj).forEach(key => this[key] = rawDataObj[key]);
 }
+
 
 Article.all = [];
 
@@ -39,13 +41,7 @@ Article.loadAll = rows => {
   // is the transformation of one collection into another. Remember that we can set variables equal to the result
   // of functions. So if we set a variable equal to the result of a .map, it will be our transformed array.
   // There is no need to push to anything.
-
-  /* OLD forEach():
-  rawData.forEach(function(ele) {
-  Article.all.push(new Article(ele));
-});
-*/
-
+  Article.all = rows.map(articleObj => new Article(articleObj));
 };
 
 Article.fetchAll = callback => {
@@ -60,17 +56,32 @@ Article.fetchAll = callback => {
 
 // TODO: Chain together a `map` and a `reduce` call to get a rough count of all words in all articles.
 Article.numWordsAll = () => {
-  return Article.all.map().reduce()
+  return Article.all.map(allObj => allObj.body.split(' ').length).reduce((acc, curr) => acc + curr, 0);
 };
 
 // TODO: Chain together a `map` and a `reduce` call to produce an array of unique author names. You will
 // probably need to use the optional accumulator argument in your reduce call.
 Article.allAuthors = () => {
-  return Article.all.map().reduce();
+  // return Article.all.map().reduce();
+  return Article.all.map(allObj => allObj.author).reduce((allNames, name)=> {
+   
+    if(!allNames.includes(name)){
+      allNames.push(name);
+
+    } 
+    return allNames;
+
+  },[] )
+
 };
 
 Article.numWordsByAuthor = () => {
   return Article.allAuthors().map(author => {
+    const totalArticleWordCount = Article.all
+          .filter(article => article.author === author)
+          .map(article => article.body)
+          .reduce((totalCount, content) => totalCount + content.split(' ').length, 0);
+  return {"authorName": author, "totalArticleWordCount": totalArticleWordCount}; 
     // TODO: Transform each author string into an object with properties for
     // the author's name, as well as the total number of words across all articles
     // written by the specified author.
@@ -125,4 +136,5 @@ Article.prototype.updateRecord = function(callback) {
   })
   .then(console.log)
   .then(callback);
-};
+}
+// }(window));

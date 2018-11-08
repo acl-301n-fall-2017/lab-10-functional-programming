@@ -2,6 +2,7 @@
 
 // TODO: Wrap the entire contents of this file in an IIFE.
 // Pass in to the IIFE a module, upon which objects can be attached for later access.
+(function (module) {
 var articleView = {};
 
 articleView.populateFilters = function() {
@@ -128,6 +129,9 @@ articleView.initIndexPage = function() {
 };
 
 articleView.initAdminPage = function() {
+  const template = Handlebars.compile($('#authorTemplate').text());
+  const tempFiller = template(Article.numWordsByAuthor());
+  
   // TODO: Call the Handlebars `.compile` function, which will return a function for you to use where needed.
   // Make sure you assign the result of your Handlebars.compile call to a variable called "template", since
   // we are then calling "template" on line 117.
@@ -140,4 +144,8 @@ articleView.initAdminPage = function() {
   // REVIEW: Simply write the correct values to the page:
   $('#blog-stats .articles').text(Article.all.length);
   $('#blog-stats .words').text(Article.numWordsAll());
+
+  return tempFiller;
 };
+module.articleView = articleView;
+})(window);
